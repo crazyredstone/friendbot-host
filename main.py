@@ -1,6 +1,9 @@
 # IMPORT DISCORD.PY. ALLOWS ACCESS TO DISCORD'S API.
 import discord
-import status
+import os
+
+# Import load_dotenv function from dotenv module.
+from dotenv import load_dotenv
 
 # GETS THE CLIENT OBJECT FROM DISCORD.PY. CLIENT IS SYNONYMOUS WITH BOT.
 bot = discord.Client()
@@ -25,9 +28,9 @@ async def on_ready():
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
 async def on_message(message):
-	print(message.content)
+	print('{0.author}: {0.content}'.format(message))
 	# CHECKS IF THE MESSAGE THAT WAS SENT IS EQUAL TO "HELLO".
-	if message.content == "Привет <@!800147221722300477>":
+	if message.content == "<@!800147221722300477> привет":
 		# SENDS BACK A MESSAGE TO THE CHANNEL.
 		await message.channel.send("Здравствуй, я несу дружбомагию")
 	if message.content == "<@!800147221722300477> ты гей?":

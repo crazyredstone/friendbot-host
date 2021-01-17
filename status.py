@@ -5,7 +5,6 @@ class MyClient(discord.Client):
 			print('Logged on as {0}!'.format(self.user))
 
 	async def on_message(self, message):
-     		print('{0.author}: {0.content}'.format(message))
+     		
 
 client = MyClient()
-client.run('my token goes here')
