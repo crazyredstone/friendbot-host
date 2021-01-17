@@ -31,9 +31,8 @@ async def on_message(message):
 		await message.channel.send("Здравствуй, я несу дружбомагию")
 	if message.content == "<@!800147221722300477> ты гей?":
 		await message.channel.send("Я носитель дружбомагии")
-	if message.content == "<@!800147221722300477> купи Скайрим":
-	    await message.channel.send("Покупаю")
-
+	if message.content == "<@!800147221722300477> кто такой Хабар?":
+		await message.channel.send("Вождь нескольких групп и этого сервера Дискорд")
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
 bot.run("ODAwMTQ3MjIxNzIyMzAwNDc3.YAN5Kw.iZ7uMwBDH4BTgO7H0nPY7FjuG6U")
