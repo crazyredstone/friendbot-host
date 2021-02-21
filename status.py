@@ -1,10 +1,7 @@
 import discord
+from discord.client import Client
 
-class MyClient(discord.Client):
-	async def on_ready(self):
-			print('Logged on as {0}!'.format(self.user))
+async def client(change_presence):
+	activity = discord.Activity(name='тебя', type=discord.ActivityType.listening)
+	await change_presence(activity=activity)
 
-	async def on_message(self, message):
-     		
-
-client = MyClient()
