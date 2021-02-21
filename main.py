@@ -16,7 +16,6 @@ from pip._internal.network import session
 from discord import channel
 # Import load_dotenv function from dotenv module.
 from dotenv import load_dotenv
-from asyncio.tasks import async
 # Importing SQLITE3
 import sqlite3
 
