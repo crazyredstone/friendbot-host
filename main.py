@@ -10,22 +10,15 @@ import asyncio
 import aiohttp
 # Status
 import status
+import sqlite3
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
 from discord.ext import commands
 from pip._internal.network import session
 from discord import channel
 # Import load_dotenv function from dotenv module.
 from dotenv import load_dotenv
-# Importing SQLITE3
-import sqlite3
 
-# Logger life in log-file
-		logger = logging.getLogger('discord')
-		logger.setLevel(logging.DEBUG)
-		handler = logging.FileHandler(filename='discord-log.log', encoding='utf-8', mode='w')
-		handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-		logger.addHandler(handler)
-		logging.basicConfig(level=logging.INFO)
+
 
 # Loads the .env file that resides on the same level as the script.
 load_dotenv()
@@ -59,6 +52,15 @@ async def on_ready():
 
 	# PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
 	print("Бот на станции " + str(guild_count) + " серверов.")
+
+
+# Logger life in log-file
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+logging.basicConfig(level=logging.INFO)
 
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
