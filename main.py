@@ -65,17 +65,18 @@ logging.basicConfig(level=logging.INFO)
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
 async def on_message(message):
+	if message.author.id == 800147221722300477:
+		return
 	print('{0.author}: {0.content}'.format(message))
 	# CHECKS IF THE MESSAGE THAT WAS SENT IS EQUAL TO "HELLO".
 	if message.content == "<@!800147221722300477> привет":
 		# SENDS BACK A MESSAGE TO THE CHANNEL.
-		channel = message.get_channel(769652253047914520)
 		await message.channel.send("Здравствуй, я несу дружбомагию")
-	if message.content == "<@!800147221722300477> ты гей?":
+	if message.content == "<@!800147221722300477> ты кто?":
 		await message.channel.send("Я носитель дружбомагии")
 	if message.content == "<@!800147221722300477> кто такой Хабар?":
 		await message.channel.send("Вождь нескольких групп и этого сервера Дискорд")
-	if message.content == ("арсен говнов)")
+	if message.content == "арсен говнов)":
 		await message.channel.send("арсен говнов)")
 	# INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
 	await bot.process_commands(message)
@@ -90,14 +91,6 @@ async def ping(ctx):
 
 # Функционал отменён.
 # Убирает и возвращает роль
-
-async def main():
-	await asyncio.sleep(10)
-	async with aiohttp.ClientSession() as session:
-		async with session.get('http://aws.random.cat/meow') as r:
-			if r.status == 200:
-				js = await r.json()
-				await channel.send(js['file'])
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
 bot.run(DISCORD_TOKEN)
