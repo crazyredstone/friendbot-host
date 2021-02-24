@@ -56,7 +56,7 @@ async def on_ready():
 
 # Logger life in log-file
 logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
@@ -67,7 +67,7 @@ logging.basicConfig(level=logging.INFO)
 async def on_message(message):
 	if message.author.id == 800147221722300477:
 		return
-	print('{0.author}: {0.content}'.format(message))
+	print('Сообщение от {0.author}: {0.content}'.format(message))
 	# CHECKS IF THE MESSAGE THAT WAS SENT IS EQUAL TO "HELLO".
 	if message.content == "<@!800147221722300477> привет":
 		# SENDS BACK A MESSAGE TO THE CHANNEL.
