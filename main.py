@@ -9,7 +9,7 @@ import asyncio
 # HTTP
 import aiohttp
 # Status
-import status
+import statusS
 import sqlite3
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
 from discord.ext import commands
@@ -17,7 +17,8 @@ from pip._internal.network import session
 from discord import channel
 # Import load_dotenv function from dotenv module.
 from dotenv import load_dotenv
-
+# Discord Client for presence
+from discord.client import Client
 
 
 # Loads the .env file that resides on the same level as the script.
@@ -29,7 +30,7 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 # GETS THE CLIENT OBJECT FROM DISCORD.PY. CLIENT IS SYNONYMOUS WITH BOT.
 bot = discord.Client()
 # CREATES A NEW BOT OBJECT WITH A SPECIFIED PREFIX. IT CAN BE WHATEVER YOU WANT IT TO BE.
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="?")
 
 # discord.AuditLogDiff(roles)
 
@@ -62,6 +63,11 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 logging.basicConfig(level=logging.INFO)
 
+# Change Presence in bot
+async def client(change_presence):
+    activity = discord.Activity(name='тебя', type=discord.ActivityType.listening)
+    await change_presence(activity=activity)
+
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
 async def on_message(message):
@@ -74,10 +80,15 @@ async def on_message(message):
 		await message.channel.send("Здравствуй, я несу дружбомагию")
 	if message.content == "<@!800147221722300477> ты кто?":
 		await message.channel.send("Я носитель дружбомагии")
+	if message.content == "<@!800147221722300477> зачем пришёл сюда?":
+		await message.channel.send("Чтобы нести дружбомагию в ваш прекрасный сервер.")
+		await asyncio.sleep(2)
+		await message.channel.send("<:scootalook:809402090253451316>")
 	if message.content == "<@!800147221722300477> кто такой Хабар?":
 		await message.channel.send("Вождь нескольких групп и этого сервера Дискорд")
 	if message.content == "арсен говнов)":
 		await message.channel.send("арсен говнов)")
+
 	# INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
 	await bot.process_commands(message)
 
@@ -88,6 +99,9 @@ async def on_message(message):
 )
 async def ping(ctx):
 	await ctx.channel.send("pong")
+
+async def length(ctx):
+    await ctx.send('Ваше сообщение {} длинное.'.format(len(ctx.message.content)))
 
 # Функционал отменён.
 # Убирает и возвращает роль
