@@ -1,25 +1,19 @@
 # IMPORT DISCORD.PY. ALLOWS ACCESS TO DISCORD'S API.
-import discord
-# Import OS module. 
-import os
-# Import Logging System.
-import logging
 # Import what
 import asyncio
-# HTTP
-import aiohttp
-# Status
-import statusS
+# Import Logging System.
+import logging
+# Import OS module.
+import os
 import sqlite3
+
+import discord
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
 from discord.ext import commands
-from pip._internal.network import session
-from discord import channel
 # Import load_dotenv function from dotenv module.
 from dotenv import load_dotenv
-# Discord Client for presence
-from discord.client import Client
 
+# Discord Client for presence
 
 # Loads the .env file that resides on the same level as the script.
 load_dotenv()
@@ -28,7 +22,7 @@ load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 # GETS THE CLIENT OBJECT FROM DISCORD.PY. CLIENT IS SYNONYMOUS WITH BOT.
-bot = discord.Client()
+botz = discord.Client()
 # CREATES A NEW BOT OBJECT WITH A SPECIFIED PREFIX. IT CAN BE WHATEVER YOU WANT IT TO BE.
 bot = commands.Bot(command_prefix="?")
 
@@ -37,22 +31,23 @@ bot = commands.Bot(command_prefix="?")
 # Connect to SQLITE3 BASE
 conn = sqlite3.connect('redies.db')
 
+
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
 @bot.event
 async def on_ready():
-	# CREATES A COUNTER TO KEEP TRACK OF HOW MANY GUILDS / SERVERS THE BOT IS CONNECTED TO.
-	guild_count = 0
+    # CREATES A COUNTER TO KEEP TRACK OF HOW MANY GUILDS / SERVERS THE BOT IS CONNECTED TO.
+    guild_count = 0
 
-	# LOOPS THROUGH ALL THE GUILD / SERVERS THAT THE BOT IS ASSOCIATED WITH.
-	for guild in bot.guilds:
-		# PRINT THE SERVER'S ID AND NAME.
-		print(f"- {guild.id} (название: {guild.name})")
+    # LOOPS THROUGH ALL THE GUILD / SERVERS THAT THE BOT IS ASSOCIATED WITH.
+    for guild in bot.guilds:
+        # PRINT THE SERVER'S ID AND NAME.
+        print(f"- {guild.id} (название: {guild.name})")
 
-		# INCREMENTS THE GUILD COUNTER.
-		guild_count = guild_count + 1
+        # INCREMENTS THE GUILD COUNTER.
+        guild_count = guild_count + 1
 
-	# PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
-	print("Бот на станции " + str(guild_count) + " серверов.")
+    # PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
+    print("Бот на станции " + str(guild_count) + " серверов.")
 
 
 # Logger life in log-file
@@ -63,48 +58,53 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 logging.basicConfig(level=logging.INFO)
 
+
 # Change Presence in bot
 async def client(change_presence):
     activity = discord.Activity(name='тебя', type=discord.ActivityType.listening)
     await change_presence(activity=activity)
 
+
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
 async def on_message(message):
-	if message.author.id == 800147221722300477:
-		return
-	print('Сообщение от {0.author}: {0.content}'.format(message))
-	# CHECKS IF THE MESSAGE THAT WAS SENT IS EQUAL TO "HELLO".
-	if message.content == "<@!800147221722300477> привет":
-		# SENDS BACK A MESSAGE TO THE CHANNEL.
-		await message.channel.send("Здравствуй, я несу дружбомагию")
-	if message.content == "<@!800147221722300477> ты кто?":
-		await message.channel.send("Я носитель дружбомагии")
-	if message.content == "<@!800147221722300477> зачем пришёл сюда?":
-		await message.channel.send("Чтобы нести дружбомагию в ваш прекрасный сервер.")
-		await asyncio.sleep(2)
-		await message.channel.send("<:scootalook:809402090253451316>")
-	if message.content == "<@!800147221722300477> кто такой Хабар?":
-		await message.channel.send("Вождь нескольких групп и этого сервера Дискорд")
-	if message.content == "арсен говнов)":
-		await message.channel.send("арсен говнов)")
+    if message.author.id == 800147221722300477:
+        return
+    print('Сообщение от {0.author}: {0.content}'.format(message))
+    # CHECKS IF THE MESSAGE THAT WAS SENT IS EQUAL TO "HELLO".
+    if message.content == "<@!800147221722300477> привет":
+        # SENDS BACK A MESSAGE TO THE CHANNEL.
+        await message.channel.send("Здравствуй, я несу дружбомагию")
+    if message.content == "<@!800147221722300477> ты кто?":
+        await message.channel.send("Я носитель дружбомагии")
+    if message.content == "<@!800147221722300477> зачем пришёл сюда?":
+        await message.channel.send("Чтобы нести дружбомагию в ваш прекрасный сервер.")
+        await asyncio.sleep(2)
+        await message.channel.send("<:scootalook:809402090253451316>")
+    if message.content == "<@!800147221722300477> кто такой Хабар?":
+        await message.channel.send("Вождь нескольких групп и этого сервера Дискорд")
+    if message.content == "арсен говнов)":
+        await message.channel.send("арсен говнов)")
 
-	# INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
-	await bot.process_commands(message)
+    # INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
+    await bot.process_commands(message)
+
 
 # Basic command resolve on ping. Replying by pong
 @bot.command(
-	# Помощь
-	help="Тестовая команда бота"
+    # Помощь
+    help="Тестовая команда бота"
 )
 async def ping(ctx):
-	await ctx.channel.send("pong")
+    await ctx.channel.send("pong")
+
 
 async def length(ctx):
     await ctx.send('Ваше сообщение {} длинное.'.format(len(ctx.message.content)))
+
 
 # Функционал отменён.
 # Убирает и возвращает роль
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
-bot.run(DISCORD_TOKEN)
+botz.run(DISCORD_TOKEN)
