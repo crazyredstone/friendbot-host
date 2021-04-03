@@ -8,17 +8,18 @@ import sqlite3
 # IMPORT DISCORD.PY. ALLOWS ACCESS TO DISCORD'S API.
 import discord
 import datetime
-# from discord import user
 from channel_ignore import chan_ignore
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
 from discord.ext import commands, tasks
 # Import load_dotenv function from dotenv module.
 from dotenv import load_dotenv
 # from discord.utils import get
-from discord import client, utils
-from discord import channel
+from discord import utils
 from datetime import datetime
-from discord import member
+from time import time
+
+# Startup and bot loading section
+# Welcome
 
 # Loads the .env file that resides on the same level as the script.
 load_dotenv()
@@ -26,15 +27,14 @@ load_dotenv()
 # Grab the API token from the .env file.
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-# GETS THE CLIENT OBJECT FROM DISCORD.PY. CLIENT IS SYNONYMOUS WITH BOT.
-# bot1 = discord.Client()
+# Bot's privilege performance
+intents = discord.Intents.all()
 # CREATES A NEW BOT OBJECT WITH A SPECIFIED PREFIX. IT CAN BE WHATEVER YOU WANT IT TO BE.
-bot = commands.Bot(command_prefix="?")
-
+bot = commands.Bot(command_prefix="?", intents=intents)
 # discord.AuditLogDiff(roles)
 
 # Connect to SQLITE3 BASE
-conn = sqlite3.connect('redies.db')
+conn = sqlite3.connect('orbit.db')
 
 
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
@@ -51,7 +51,7 @@ async def on_ready():
         # INCREMENTS THE GUILD COUNTER.
         guild_count = guild_count + 1
 
-    # Must work with status bot
+    # Bot status presence
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening,
                                                         name='участников'))
 
@@ -87,26 +87,21 @@ async def on_message(message):
     # INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
     await bot.process_commands(message)
 
-
+# LISTEN WHEN NEWBIE JOINS TO DISCORD SERVER
+@bot.event
 async def on_member_join(member):
-    now = datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    print(f'{dt_string}: Новый участник {member} зашёл на сервер', 'Прежде чем войти ему требуется принять правила сервера',
-            sep='\n')
-    await asyncio.sleep(2)
-
-    channel = await member.create_dm()
-    await channel.send("Привет, у тебя есть 10 минут, на то, чтобы принять правила")
-    if member.pending():
-        member.addroles(utils.get(member.guild.roles, id="769663582849204234"))
-    else:
-        await asyncio.sleep(600)
-        print(f'{dt_string}')
-        print(f'{member} не принял правила, в этом случае он будет кикнут')
-        member.kick(reason=f'{member} не принял правила')
-
+    await member.send("Привет, на тебя наложена чёрная метка, у тебя есть 10 минут, на то, чтобы принять правила")
+#    await member.add_roles(utils.get(member.guild.roles, id=))
+    nowtime = int(time())
+    while member.pending:
+        if int(time()) - nowtime >= 600:
+            print(f'{member} не принял правила, в этом случае он будет кикнут')
+            await member.send("Вас кикнули по причине: В следующий раз прими правила")
+            await member.kick(reason=f'{member} не принял правила')
+            return
+        await asyncio.sleep(1)
+    await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
 # Basic command resolve on ping. Replying by pong
-# TODO: Fix command bot
 @bot.command(
     # Помощь
     help="Тестовая команда бота"
