@@ -18,8 +18,11 @@ from discord import utils
 from datetime import datetime
 from time import time
 
-# Startup and bot loading section
-# Welcome
+# SECTION: Startup and bot loading section
+# Here's code contains commands when bot startup
+# And It comes to load with this shit
+# YES
+
 
 # Loads the .env file that resides on the same level as the script.
 load_dotenv()
@@ -35,6 +38,9 @@ bot = commands.Bot(command_prefix="?", intents=intents)
 
 # Connect to SQLITE3 BASE
 conn = sqlite3.connect('orbit.db')
+
+
+# SECTION 2: What's more guilds?
 
 
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
@@ -58,6 +64,18 @@ async def on_ready():
     # PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
     print("Бот на станции " + str(guild_count) + " серверов.")
 
+#    channelhd = bot.get_channel()
+#    role = discord.utils.get(user.server.roles, name="CSGO_P")
+#    message = await bot.send_message(channel, "React to me!")
+#    while True:
+#        reaction = await bot.wait_for_reaction(emoji="🏃", message=message)
+#        await bot.add_roles(reaction.message.author, role)
+#
+#    emoj = '\:syringe:'
+#    channelst = bot.get_channel(805206795895308319)
+#    await channelst.send('Ты можешь нажать на реакцию, чтобы получить дополнительный доступ к категории "DARK"')
+#    if message.content == channelst:
+#        await message.add_reaction(emoj)
 
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
@@ -87,30 +105,60 @@ async def on_message(message):
     # INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
     await bot.process_commands(message)
 
-# LISTEN WHEN NEWBIE JOINS TO DISCORD SERVER
-@bot.event
-async def on_member_join(member):
-    await member.send("Привет, на тебя наложена чёрная метка, у тебя есть 10 минут, на то, чтобы принять правила")
-#    await member.add_roles(utils.get(member.guild.roles, id=))
-    nowtime = int(time())
-    while member.pending:
-        if int(time()) - nowtime >= 600:
-            print(f'{member} не принял правила, в этом случае он будет кикнут')
-            await member.send("Вас кикнули по причине: В следующий раз прими правила")
-            await member.kick(reason=f'{member} не принял правила')
-            return
-        await asyncio.sleep(1)
-    await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
+
+# embed=discord.Embed(title=ДАРК, url=https://res.cloudinary.com/redys/image/upload/v1617568573/1d344b00edd680dda90b03e6727844b2_gl2m0a.png, description=Если вы любитель дарк-контента, то можете получить роль, которая даст вам дополнительные возможности на этом сервере. Нажми - :syringe: если ты дарк, color=0x7c0e0e)
+# embed.set_author(name=Получение ролей, icon_url=https://res.cloudinary.com/redys/image/upload/v1617568811/noun_User_role_281793_icaehb.png)
+# embed.add_field(name=undefined, value=undefined, inline=False)
+# await ctx.send(embed=embed)
 # Basic command resolve on ping. Replying by pong
 @bot.command(
     # Помощь
-    help="Тестовая команда бота"
+    help="Тестовая команда бота для проверки работа команд"
 )
 async def ping(ctx):
     await ctx.channel.send("pong")
 
+
+#@bot.command()
+#async def displayembed():
+#    embed = discord.Embed(
+#        title = 'Заголовок',
+#        description = 'Описание',
+# #       colour = discord.Colour.from_rgb(106, 192, 245)
+#    )
+#    await bot.say(embed=embed)
+
+
+# SECTION 3: Member join event
+
+
+# LISTEN WHEN NEWBIE JOINS TO DISCORD SERVER
+@bot.event
+async def on_member_join(member):
+    channel = bot.get_channel(769653758363566090)
+#    memberuser = utils.find(lambda r: r.name == 'Брони', member.guild.roles)
+#    if memberuser in member.guild.roles:
+#        print('Member already has role')
+#    else:
+#        await member.add_roles(utils.get(member.guild.roles, id=776880603152908310))
+    await member.send("Привет путник, на тебя наложена **чёрная метка**, чтобы её снять, прими пожалуйста **правила нашего "
+                      "сервера.**")
+    nowtime = int(time())
+    while member.pending:
+        if int(time()) - nowtime >= 600:
+            print(f'{member} не принял правила, в этом случае он будет кикнут из сервера')
+            await member.send("Вы не приняли правила, в этом случае вас кикнули из сервера")
+            await member.kick(reason=f'{member} не принял правила')
+            return
+        await asyncio.sleep(1)
+    await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
+    await member.remove_roles(utils.get(member.guild.roles, id=776880603152908310))
+    await channel.send(f'С броняши {member} была снята чёрная метка! '
+                       f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
+
 # Logger life in log-file
 logger = logging.getLogger('discord')
+logging.basicConfig(level=logging.INFO)
 logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord-{:%Y-%m-%d %H-%M-%S}.log'.format(datetime.now()), encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
