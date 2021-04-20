@@ -8,6 +8,9 @@ import sqlite3
 # IMPORT DISCORD.PY. ALLOWS ACCESS TO DISCORD'S API.
 import discord
 import datetime
+
+import requests
+from discord import RawReactionActionEvent
 from channel_ignore import chan_ignore
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
 from discord.ext import commands, tasks
@@ -41,7 +44,9 @@ conn = sqlite3.connect('orbit.db')
 
 
 # SECTION 2: What's more guilds?
-
+def __init__(self, bot):
+    super().__init__()
+    self.bot = bot
 
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
 @bot.event
@@ -64,18 +69,14 @@ async def on_ready():
     # PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
     print("Бот на станции " + str(guild_count) + " серверов.")
 
-#    channelhd = bot.get_channel()
-#    role = discord.utils.get(user.server.roles, name="CSGO_P")
-#    message = await bot.send_message(channel, "React to me!")
-#    while True:
-#        reaction = await bot.wait_for_reaction(emoji="🏃", message=message)
-#        await bot.add_roles(reaction.message.author, role)
-#
-#    emoj = '\:syringe:'
-#    channelst = bot.get_channel(805206795895308319)
-#    await channelst.send('Ты можешь нажать на реакцию, чтобы получить дополнительный доступ к категории "DARK"')
-#    if message.content == channelst:
-#        await message.add_reaction(emoj)
+
+# EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
+# @bot.event
+# async def on_message(message):
+# embed=discord.Embed(title='ДАРК', url='https://res.cloudinary.com/redys/image/upload/v1617568573/1d344b00edd680dda90b03e6727844b2_gl2m0a.png', description='Если вы любитель дарк-контента, то можете получить роль, которая даст вам дополнительные возможности на этом сервере. Нажми - :syringe: если ты дарк', color=0x7c0e0e)
+# embed.set_author(name='Получение ролей', icon_url='https://res.cloudinary.com/redys/image/upload/v1617568811/noun_User_role_281793_icaehb.png')
+# await message.send(embed=embed)
+emoj = ''
 
 # EVENT LISTENER FOR WHEN A NEW MESSAGE IS SENT TO A CHANNEL.
 @bot.event
@@ -101,7 +102,6 @@ async def on_message(message):
         await message.channel.send("Вождь MaM и этого сервера Дискорд")
     if message.content == "арсен говнов)":
         await message.channel.send("арсен говнов)")
-
     # INCLUDES THE COMMANDS FOR THE BOT. WITHOUT THIS LINE, YOU CANNOT TRIGGER YOUR COMMANDS.
     await bot.process_commands(message)
 
@@ -110,7 +110,18 @@ async def on_message(message):
 # embed.set_author(name=Получение ролей, icon_url=https://res.cloudinary.com/redys/image/upload/v1617568811/noun_User_role_281793_icaehb.png)
 # embed.add_field(name=undefined, value=undefined, inline=False)
 # await ctx.send(embed=embed)
+
+
 # Basic command resolve on ping. Replying by pong
+embed = discord.Embed(
+        title='ДАРК',
+        description='Если вы любитель дарк-контента, то можете получить роль, которая даст вам дополнительные возможности на этом сервере. Нажми - :syringe: если ты дарк',
+        url='https://res.cloudinary.com/redys/image/upload/v1617568573/1d344b00edd680dda90b03e6727844b2_gl2m0a.png',
+        image='https://res.cloudinary.com/redys/image/upload/v1617568811/noun_User_role_281793_icaehb.png',
+        colour=discord.Colour.dark_red()
+    )
+
+
 @bot.command(
     # Помощь
     help="Тестовая команда бота для проверки работа команд"
@@ -119,14 +130,6 @@ async def ping(ctx):
     await ctx.channel.send("pong")
 
 
-#@bot.command()
-#async def displayembed():
-#    embed = discord.Embed(
-#        title = 'Заголовок',
-#        description = 'Описание',
-# #       colour = discord.Colour.from_rgb(106, 192, 245)
-#    )
-#    await bot.say(embed=embed)
 
 
 # SECTION 3: Member join event
@@ -136,13 +139,7 @@ async def ping(ctx):
 @bot.event
 async def on_member_join(member):
     channel = bot.get_channel(769653758363566090)
-#    memberuser = utils.find(lambda r: r.name == 'Брони', member.guild.roles)
-#    if memberuser in member.guild.roles:
-#        print('Member already has role')
-#    else:
-#        await member.add_roles(utils.get(member.guild.roles, id=776880603152908310))
-    await member.send("Привет путник, на тебя наложена **чёрная метка**, чтобы её снять, прими пожалуйста **правила нашего "
-                      "сервера.**")
+    await member.send("Привет путник, у тебя есть 10 минут на то, чтобы принять **правила нашего сервера.**")
     nowtime = int(time())
     while member.pending:
         if int(time()) - nowtime >= 600:
@@ -153,18 +150,27 @@ async def on_member_join(member):
         await asyncio.sleep(1)
     await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
     await member.remove_roles(utils.get(member.guild.roles, id=776880603152908310))
-    await channel.send(f'С броняши {member} была снята чёрная метка! '
+    await channel.send(f'Броняша {member} принял правила! '
                        f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
+
 
 # Logger life in log-file
 logger = logging.getLogger('discord')
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord-{:%Y-%m-%d %H-%M-%S}.log'.format(datetime.now()), encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename=r'C:\Users\crazy\Desktop\friendbot\logs\discord-{:%Y-%m-%d %H-%M-%S}.log'.format(datetime.now()), encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-# Gotta take the role and return it's back.(but that does not work, because function has cancelled)
+
+
+url = "https://discord.com/api/webhooks/830351578338426900/4SAL2aaw-ND-DgOyzuEKzjrn9kDA80jgZ412jWBU6Y2xzT2nDAkCmIz1FqfOfmSeX81l"
+timeout = 5
+try:
+    requests.get(url, timeout=timeout)
+    print(f"ВИЖУ ПИТАНИЕ! МОЛОДЕЦ САНЯ!")
+except (requests.ConnectionError, requests.Timeout ) as exception:
+    print("Я потерял соединение, быстро дайте мне педаль в руки!.")
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
 bot.run(DISCORD_TOKEN)
