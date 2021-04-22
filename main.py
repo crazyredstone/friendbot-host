@@ -141,7 +141,7 @@ async def on_member_join(member):
 #        print('Member already has role')
 #    else:
 #        await member.add_roles(utils.get(member.guild.roles, id=776880603152908310))
-    await member.send("Привет путник, на тебя наложена **чёрная метка**, чтобы её снять, прими пожалуйста **правила нашего "
+    await member.send("Привет путник, у тебя есть 10 минут, чтобы принять **правила нашего "
                       "сервера.**")
     nowtime = int(time())
     while member.pending:
@@ -153,7 +153,7 @@ async def on_member_join(member):
         await asyncio.sleep(1)
     await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
     await member.remove_roles(utils.get(member.guild.roles, id=776880603152908310))
-    await channel.send(f'С броняши {member} была снята чёрная метка! '
+    await channel.send(f'Броняша {member} принял правила! '
                        f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
 
 # Logger life in log-file
