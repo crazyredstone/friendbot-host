@@ -8,6 +8,9 @@ import sqlite3
 # IMPORT DISCORD.PY. ALLOWS ACCESS TO DISCORD'S API.
 import discord
 import datetime
+
+import requests
+from discord import RawReactionActionEvent
 from channel_ignore import chan_ignore
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
 from discord.ext import commands, tasks
@@ -41,7 +44,9 @@ conn = sqlite3.connect('orbit.db')
 
 
 # SECTION 2: What's more guilds?
-
+def __init__(self, bot):
+    super().__init__()
+    self.bot = bot
 
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
 @bot.event
@@ -141,8 +146,7 @@ async def on_member_join(member):
 #        print('Member already has role')
 #    else:
 #        await member.add_roles(utils.get(member.guild.roles, id=776880603152908310))
-    await member.send("Привет путник, у тебя есть 10 минут, чтобы принять **правила нашего "
-                      "сервера.**")
+    await member.send("Привет путник, у тебя есть 10 минут на то, чтобы принять **правила нашего сервера.**")
     nowtime = int(time())
     while member.pending:
         if int(time()) - nowtime >= 600:
@@ -164,7 +168,15 @@ handler = logging.FileHandler(filename='discord-{:%Y-%m-%d %H-%M-%S}.log'.format
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-# Gotta take the role and return it's back.(but that does not work, because function has cancelled)
+
+
+url = "https://discord.com/api/webhooks/830351578338426900/4SAL2aaw-ND-DgOyzuEKzjrn9kDA80jgZ412jWBU6Y2xzT2nDAkCmIz1FqfOfmSeX81l"
+timeout = 5
+try:
+    requests.get(url, timeout=timeout)
+    print(f"ВИЖУ ПИТАНИЕ! МОЛОДЕЦ САНЯ!")
+except (requests.ConnectionError, requests.Timeout ) as exception:
+    print("Я потерял соединение, быстро дайте мне педаль в руки!.")
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
 bot.run(DISCORD_TOKEN)
