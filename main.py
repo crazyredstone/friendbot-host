@@ -151,12 +151,11 @@ async def on_member_join(member):
     while member.pending:
         if int(time()) - nowtime >= 600:
             print(f'{member} не принял правила, в этом случае он будет кикнут из сервера')
-            await member.send("Вы не приняли правила, в этом случае вас кикнули из сервера")
-            await member.kick(reason=f'{member} не принял правила')
+            await member.send("Вас кикнули из сервера потому что вы не приняли правила, вы можете попробовать снова принять правила, перейдя по ссылке: https://discord.gg/MSW6eSm388")
+            await member.kick(reason=f'{member} не принял правила за указанное время')
             return
         await asyncio.sleep(1)
     await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
-    await member.remove_roles(utils.get(member.guild.roles, id=776880603152908310))
     await channel.send(f'Броняша {member} принял правила! '
                        f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
 
