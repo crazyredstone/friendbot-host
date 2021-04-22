@@ -161,9 +161,9 @@ async def on_member_join(member):
 
 # Logger life in log-file
 logger = logging.getLogger('discord')
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord-{:%Y-%m-%d %H-%M-%S}.log'.format(datetime.now()), encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename=r'C:\Users\crazy\Desktop\friendbot\logs\discord-{:%Y-%m-%d %H-%M-%S}.log'.format(datetime.now()), encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
