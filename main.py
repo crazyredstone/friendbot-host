@@ -156,8 +156,8 @@ async def on_member_join(member):
             return
         await asyncio.sleep(1)
     await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
-    await member.send(f'Вы приняли правила {member.mention}! '
-                       f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
+    await member.send(f'Вы приняли правила {member.mention}!'
+                      f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
 
 # Logger life in log-file
 logger = logging.getLogger('discord')
