@@ -9,6 +9,7 @@ import sqlite3
 import discord
 import datetime
 import requests
+from os_check import logpath
 from discord import RawReactionActionEvent
 from channel_ignore import chan_ignore
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
@@ -53,6 +54,9 @@ def __init__(self, bot):
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
 @bot.event
 async def on_ready():
+    # CHECKING CREATED PATH IN DIRECTORY
+    print(logpath)
+
     # CREATES A COUNTER TO KEEP TRACK OF HOW MANY GUILDS / SERVERS THE BOT IS CONNECTED TO.
     guild_count: int = 0
 
@@ -162,7 +166,7 @@ async def on_member_join(member):
             await member.kick(reason=f'{member} не принял правила за указанное время')
             return
         await asyncio.sleep(1)
-    await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
+    await member.add_roles(utils.get(member.guild.roles, id=915129221582573589))
     await member.send(f'Вы приняли правила {member.mention}!'
                       f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
 
@@ -174,17 +178,19 @@ async def on_member_join(member):
 logger = logging.getLogger('discord')
 logging.basicConfig(level=logging.DEBUG)
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='friendbot-{datetime.now():%Y-%m-%d %H-%M-%S}-debug.log', encoding='utf-8',
+handler = logging.FileHandler(filename=r"logs/discord-" + f'{datetime.now():%Y-%m-%d %H-%M-%S}' + "-debug.log", encoding='utf-8',
                               mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
+
+
 
 url = "https://www.google.com"
 timeout = 5
 try:
     requests.get(url, timeout=timeout)
     print(f"ВИЖУ ПИТАНИЕ! За работу!!!")
-except (requests.ConnectionError, requests.Timeout) as exception:
+except (requests.ConnectionError, requests.Timeout ) as exception:
     print("Соединение потеряно! Попытка восстановления...")
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
