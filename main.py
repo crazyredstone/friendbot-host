@@ -94,7 +94,7 @@ async def on_ready():
 async def on_message(message):
     now_message = datetime.now()
     dt_string_message = now_message.strftime("%d/%m/%Y %H:%M:%S")
-    if message.author.id:
+    if message.author.id == 800147221722300477:
         return
     #    if message.channel.id in chan_ignore:
     #        return
