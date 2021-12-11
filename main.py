@@ -8,8 +8,8 @@ import sqlite3
 # IMPORT DISCORD.PY. ALLOWS ACCESS TO DISCORD'S API.
 import discord
 import datetime
-
 import requests
+from os_check import logpath
 from discord import RawReactionActionEvent
 from channel_ignore import chan_ignore
 # IMPORT COMMANDS FROM THE DISCORD.EXT MODULE.
@@ -37,10 +37,12 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents.all()
 # CREATES A NEW BOT OBJECT WITH A SPECIFIED PREFIX. IT CAN BE WHATEVER YOU WANT IT TO BE.
 bot = commands.Bot(command_prefix="?", intents=intents)
+
+
 # discord.AuditLogDiff(roles)
 
 # Connect to SQLITE3 BASE
-conn = sqlite3.connect('orbit.db')
+# conn = sqlite3.connect('orbit.db')
 
 
 # SECTION 2: What's more guilds?
@@ -48,9 +50,13 @@ def __init__(self, bot):
     super().__init__()
     self.bot = bot
 
+
 # EVENT LISTENER FOR WHEN THE BOT HAS SWITCHED FROM OFFLINE TO ONLINE.
 @bot.event
 async def on_ready():
+    # CHECKING CREATED PATH IN DIRECTORY
+    print(logpath)
+
     # CREATES A COUNTER TO KEEP TRACK OF HOW MANY GUILDS / SERVERS THE BOT IS CONNECTED TO.
     guild_count: int = 0
 
@@ -68,6 +74,7 @@ async def on_ready():
 
     # PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
     print("Бот на станции " + str(guild_count) + " серверов.")
+
 
 #    channelhd = bot.get_channel()
 #    role = discord.utils.get(user.server.roles, name="CSGO_P")
@@ -87,23 +94,25 @@ async def on_ready():
 async def on_message(message):
     now_message = datetime.now()
     dt_string_message = now_message.strftime("%d/%m/%Y %H:%M:%S")
-    if message.author.id == 800147221722300477:
+    if message.author.id:
         return
-    if message.channel.id in chan_ignore:
-        return
+    #    if message.channel.id in chan_ignore:
+    #        return
     print(
         f'{dt_string_message}' + (
             ' Message from: channel: {0.channel} --> user: {0.author}: message: {0.content}'.format(message)))
     # CHECKS IF THE MESSAGE THAT WAS SENT IS EQUAL TO "HELLO".
     if message.content == "<@!800147221722300477> привет":
         # SENDS BACK A MESSAGE TO THE CHANNEL.
-        await message.channel.send("Здравствуй, я несу дружбомагию")
+        await message.channel.send("Хай") or message.channel.send("Здарова")
     if message.content == "<@!800147221722300477> ты кто?":
-        await message.channel.send("Я носитель дружбомагии")
+        await message.channel.send("Я дружелюбный бот с аватаркой одного из лучших персонажей"
+                                   "мультфильма My Little Pony по имени Rainbow Dash <:rd_smile:919234848604979270> ")
     if message.content == "<@!800147221722300477> зачем пришёл сюда?":
-        await message.channel.send("Чтобы нести дружбомагию в ваш прекрасный сервер." + "<:scootalook:809402090253451316>")
-    if message.content == "<@!800147221722300477> кто такой Хабар?":
-        await message.channel.send("Вождь MaM и этого сервера Дискорд")
+        await message.channel.send("Чтобы нести дружбомагию в ваш прекрасный сервер." +
+                                   "<:ab_socute:916669928969474129> ")
+    #    if message.content == "<@!800147221722300477> кто такой Хабар?":
+    #        await message.channel.send("Вождь MaM и этого сервера Дискорд")
     if message.content == "арсен говнов)":
         await message.channel.send("арсен говнов)")
 
@@ -111,21 +120,23 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-# embed=discord.Embed(title=ДАРК, url=https://res.cloudinary.com/redys/image/upload/v1617568573/1d344b00edd680dda90b03e6727844b2_gl2m0a.png, description=Если вы любитель дарк-контента, то можете получить роль, которая даст вам дополнительные возможности на этом сервере. Нажми - :syringe: если ты дарк, color=0x7c0e0e)
-# embed.set_author(name=Получение ролей, icon_url=https://res.cloudinary.com/redys/image/upload/v1617568811/noun_User_role_281793_icaehb.png)
-# embed.add_field(name=undefined, value=undefined, inline=False)
-# await ctx.send(embed=embed)
-# Basic command resolve on ping. Replying by pong
+# embed=discord.Embed(title=ДАРК, url=https://res.cloudinary.com/redys/image/upload/v1617568573
+# /1d344b00edd680dda90b03e6727844b2_gl2m0a.png, description=Если вы любитель дарк-контента, то можете получить роль,
+# которая даст вам дополнительные возможности на этом сервере. Нажми - :syringe: если ты дарк, color=0x7c0e0e)
+# embed.set_author(name=Получение ролей,
+# icon_url=https://res.cloudinary.com/redys/image/upload/v1617568811/noun_User_role_281793_icaehb.png)
+# embed.add_field(name=undefined, value=undefined, inline=False) await ctx.send(embed=embed) Basic command resolve on
+# ping. Replying by pong
 @bot.command(
     # Помощь
-    help="Тестовая команда бота для проверки работа команд"
+    help="Тестовая команда бота для проверки работы команд"
 )
 async def ping(ctx):
     await ctx.channel.send("pong")
 
 
-#@bot.command()
-#async def displayembed():
+# @bot.command()
+# async def displayembed():
 #    embed = discord.Embed(
 #        title = 'Заголовок',
 #        description = 'Описание',
@@ -135,47 +146,52 @@ async def ping(ctx):
 
 
 # SECTION 3: Member join event
-
-
 # LISTEN WHEN NEWBIE JOINS TO DISCORD SERVER
 @bot.event
 async def on_member_join(member):
-    channel = bot.get_channel(769653758363566090)
-#    memberuser = utils.find(lambda r: r.name == 'Брони', member.guild.roles)
-#    if memberuser in member.guild.roles:
-#        print('Member already has role')
-#    else:
-#        await member.add_roles(utils.get(member.guild.roles, id=776880603152908310))
-    await member.send("Привет путник, у тебя есть 10 минут на то, чтобы принять **правила нашего сервера.**")
+    channel = bot.get_channel(913828766764113993)
+    #    memberuser = utils.find(lambda r: r.name == 'Брони', member.guild.roles)
+    #    if memberuser in member.guild.roles:
+    #        print('Member already has role')
+    #    else:
+    #        await member.add_roles(utils.get(member.guild.roles, id=776880603152908310))
+    await member.send("Привет друг, у тебя 10 минут до того как бот тебя кикнет, "
+                      "чтобы избежать этой учести, тебе стоит принять **правила нашего сервера.**")
     nowtime = int(time())
     while member.pending:
         if int(time()) - nowtime >= 600:
             print(f'{member} не принял правила, в этом случае он будет кикнут из сервера')
-            await member.send("Вас кикнули из сервера потому что вы не приняли правила, вы можете попробовать снова принять правила, перейдя по ссылке: https://discord.gg/MSW6eSm388")
+            await member.send("Вас кикнули из сервера потому что вы не приняли правила, вы можете попробовать снова "
+                              "принять правила, перейдя по ссылке: https://discord.gg/A3JPGcR58T")
             await member.kick(reason=f'{member} не принял правила за указанное время')
             return
         await asyncio.sleep(1)
-    await member.add_roles(utils.get(member.guild.roles, id=769663582849204234))
+    await member.add_roles(utils.get(member.guild.roles, id=915129221582573589))
     await member.send(f'Вы приняли правила {member.mention}!'
                       f'Добро пожаловать к нам на сервер путник <:eldrinko:770199830847946803>')
 
+
 # Logger life in log-file
+# Logger life in log-file
+
+
 logger = logging.getLogger('discord')
 logging.basicConfig(level=logging.DEBUG)
 logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename=r'C:\Users\crazy\Desktop\friendbot\logs\discord-{:%Y-%m-%d %H-%M-%S}.log'.format(datetime.now()), encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename=r"logs/discord-" + f'{datetime.now():%Y-%m-%d %H-%M-%S}' + "-debug.log", encoding='utf-8',
+                              mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
 
 
-url = "https://discord.com/api/webhooks/830351578338426900/4SAL2aaw-ND-DgOyzuEKzjrn9kDA80jgZ412jWBU6Y2xzT2nDAkCmIz1FqfOfmSeX81l"
+url = "https://www.google.com"
 timeout = 5
 try:
     requests.get(url, timeout=timeout)
-    print(f"ВИЖУ ПИТАНИЕ! МОЛОДЕЦ САНЯ!")
+    print(f"ВИЖУ ПИТАНИЕ! За работу!!!")
 except (requests.ConnectionError, requests.Timeout ) as exception:
-    print("Я потерял соединение, быстро дайте мне педаль в руки!.")
+    print("Соединение потеряно! Попытка восстановления...")
 
 # EXECUTES THE BOT WITH THE SPECIFIED TOKEN. TOKEN HAS BEEN REMOVED AND USED JUST AS AN EXAMPLE.
 bot.run(DISCORD_TOKEN)
