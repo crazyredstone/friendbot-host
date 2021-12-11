@@ -1,9 +1,9 @@
-[![Discord](https://discord.com/api/guilds/769652253047914517/widget.png)](https://discord.gg/a2pJGNu2gW)
+[![Discord](https://discord.com/api/guilds/913828766764113991/widget.json)](https://discord.gg/A3JPGcR58T)
 
-# FRIENDSHIP IS GAMING
+# FriendBot
 Привет добрый путник, рад тебя видеть, ты попал на GitHub страницу бота, использующегося на сервере Discord:
 
-![Friendship is Social](https://discordapp.com/api/guilds/769652253047914517/widget.png?style=banner2)
+![FreeSocial](https://discordapp.com/api/guilds/913828766764113991/widget.png?style=banner2)
 
 
 # Что по обновлениям?
