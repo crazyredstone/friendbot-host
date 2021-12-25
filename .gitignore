@@ -2,7 +2,7 @@
 *.log
 *.db
 .idea
-config
-logs
+/logs
+/__pycache__
 welcome
 .vscode

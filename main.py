@@ -69,8 +69,8 @@ async def on_ready():
         guild_count = guild_count + 1
 
     # Bot status presence
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening,
-                                                        name='участников'))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing,
+                                                        name='friendship'))
 
     # PRINTS HOW MANY GUILDS / SERVERS THE BOT IS IN.
     print("Бот на станции " + str(guild_count) + " серверов.")
